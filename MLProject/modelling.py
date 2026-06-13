@@ -27,26 +27,27 @@ precision = precision_score(y_test, y_pred)
 recall = recall_score(y_test, y_pred)
 f1 = f1_score(y_test, y_pred)
 
-mlflow.log_metric("accuracy", accuracy)
-mlflow.log_metric("precision", precision)
-mlflow.log_metric("recall", recall)
-mlflow.log_metric("f1_score", f1)
+with mlflow.start_run():
+    mlflow.log_metric("accuracy", accuracy)
+    mlflow.log_metric("precision", precision)
+    mlflow.log_metric("recall", recall)
+    mlflow.log_metric("f1_score", f1)
 
-mlflow.sklearn.log_model(
-    sk_model=model,
-    artifact_path="model"
-)
+    mlflow.sklearn.log_model(
+        sk_model=model,
+        artifact_path="model"
+    )
 
-metrics = {
-    "accuracy": float(accuracy),
-    "precision": float(precision),
-    "recall": float(recall),
-    "f1_score": float(f1)
-}
+    metrics = {
+        "accuracy": float(accuracy),
+        "precision": float(precision),
+        "recall": float(recall),
+        "f1_score": float(f1)
+    }
 
-with open("metrics.json", "w") as f:
-    json.dump(metrics, f, indent=4)
+    with open("metrics.json", "w") as f:
+        json.dump(metrics, f, indent=4)
 
-mlflow.log_artifact("metrics.json")
+    mlflow.log_artifact("metrics.json")
 
 print("Accuracy:", accuracy)
