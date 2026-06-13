@@ -26,15 +26,26 @@ jobs:
           pip install pandas
           pip install scikit-learn
 
-      - name: Run MLflow Project
+      - name: Setup MLflow Environment
         run: |
           export MLFLOW_TRACKING_URI=file:./mlruns
+          export MLFLOW_ALLOW_FILE_STORE=true
+          echo "MLFLOW_TRACKING_URI=file:./mlruns" >> $GITHUB_ENV
+          echo "MLFLOW_ALLOW_FILE_STORE=true" >> $GITHUB_ENV
+
+      - name: Run MLflow Project
+        run: |
           mlflow run MLProject --env-manager=local
 
       - name: Get RUN ID
         run: |
-          RUN_ID=$(python -c "import mlflow; print(mlflow.search_runs()[\"run_id\"].iloc[0])")
+          RUN_ID=$(ls mlruns/0 | sort -r | head -n 1)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "RUN_ID=$RUN_ID"
+
+      - name: Debug Run Folder
+        run: |
+          ls -R mlruns/0/$RUN_ID
 
       - name: Build Docker Image
         run: |
