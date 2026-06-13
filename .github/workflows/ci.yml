@@ -38,8 +38,13 @@ jobs:
 
       - name: Get Latest Run ID
         run: |
-          RUN_ID=$(find mlruns/0 -maxdepth 1 -mindepth 1 -type d | head -n 1 | xargs basename)
+          RUN_ID=$(ls mlruns/0 | sort -r | head -n 1)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "RUN_ID=$RUN_ID"
+
+      - name: Debug MLflow artifacts
+        run: |
+          ls -R mlruns/0/$RUN_ID
 
       - name: Build Docker Image
         run: |
