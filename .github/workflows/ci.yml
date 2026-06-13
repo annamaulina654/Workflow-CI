@@ -28,8 +28,6 @@ jobs:
 
       - name: Setup MLflow Environment
         run: |
-          export MLFLOW_TRACKING_URI=file:./mlruns
-          export MLFLOW_ALLOW_FILE_STORE=true
           echo "MLFLOW_TRACKING_URI=file:./mlruns" >> $GITHUB_ENV
           echo "MLFLOW_ALLOW_FILE_STORE=true" >> $GITHUB_ENV
 
@@ -39,7 +37,7 @@ jobs:
 
       - name: Get RUN ID
         run: |
-          RUN_ID=$(ls mlruns/0 | sort -r | head -n 1)
+          RUN_ID=$(ls mlruns/0 | grep -E '^[a-f0-9]{32}$' | head -n 1)
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "RUN_ID=$RUN_ID"
 
