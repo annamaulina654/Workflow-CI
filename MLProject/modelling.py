@@ -2,6 +2,7 @@ import pandas as pd
 import mlflow
 import mlflow.sklearn
 import json
+import joblib
 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -34,6 +35,11 @@ with mlflow.start_run():
     )
 
     model.fit(X_train, y_train)
+
+    joblib.dump(
+        model,
+        "model.pkl"
+    )
 
     y_pred = model.predict(X_test)
 
