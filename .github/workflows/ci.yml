@@ -7,24 +7,25 @@ on:
 
 jobs:
   train-model:
-
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
+      - name: Install Dependencies
+        run: |
+          pip install pandas
+          pip install scikit-learn
+          pip install matplotlib
+          pip install mlflow
 
-    - name: Install dependencies
-      run: |
-        pip install mlflow
-
-    - name: Run MLflow Project
-      run: |
-        cd MLProject
-        mlflow run .
+      - name: Run Training
+        run: |
+          cd MLProject
+          python modelling.py
