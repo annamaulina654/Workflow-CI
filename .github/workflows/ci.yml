@@ -24,8 +24,17 @@ jobs:
           pip install scikit-learn
           pip install matplotlib
           pip install mlflow
+          pip install joblib
 
       - name: Run Training
         run: |
           cd MLProject
           python modelling.py
+
+      - name: Upload Model Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: telco-churn-model
+          path: |
+            MLProject/model.pkl
+            MLProject/metrics.json
